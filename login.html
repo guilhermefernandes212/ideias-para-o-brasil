@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Entrar · Ideias para o Brasil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --verde: #00994a;
+      --verde-escuro: #007a3b;
+      --verde-claro: #e7f6ee;
+      --amarelo: #facc15;
+      --fundo: #fafaf9;
+      --card: #ffffff;
+      --texto: #111827;
+      --texto-suave: #6b7280;
+      --borda: #e7e5e4;
+      --borda-forte: #d6d3d1;
+      --vermelho: #e11d48;
+      --raio: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--fundo); color: var(--texto);
+      line-height: 1.6; -webkit-font-smoothing: antialiased;
+    }
+    button, input { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+
+    /* ---------- Menu ---------- */
+    .menu {
+      position: sticky; top: 0; z-index: 40;
+      background: rgba(250, 250, 249, .85);
+      backdrop-filter: saturate(180%) blur(12px);
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid var(--borda);
+    }
+    .menu-inner {
+      max-width: 780px; margin: 0 auto; padding: 0 16px;
+      display: flex; align-items: center; gap: 4px; height: 60px;
+    }
+    .menu-marca {
+      display: inline-flex; align-items: center; gap: 9px; margin-right: auto;
+      font-weight: 700; font-size: 15px; color: var(--texto); text-decoration: none; letter-spacing: -.01em;
+    }
+    .marca-icone { width: 22px; height: 22px; border-radius: 7px; background: var(--verde); display: grid; place-items: center; }
+    .marca-icone span { width: 9px; height: 9px; border-radius: 50%; background: var(--amarelo); }
+    .menu a.item {
+      color: var(--texto-suave); text-decoration: none; font-weight: 500; font-size: 14px;
+      padding: 7px 14px; border-radius: 999px; transition: color .15s, background .15s;
+    }
+    .menu a.item:hover { color: var(--texto); }
+    .menu a.item.ativo { color: var(--texto); background: #f0efed; }
+
+    /* ---------- Caixa de login ---------- */
+    main { max-width: 420px; margin: 0 auto; padding: 64px 16px 80px; }
+    .topo { text-align: center; margin-bottom: 28px; }
+    .topo .marca-icone { width: 44px; height: 44px; border-radius: 13px; margin: 0 auto 18px; }
+    .topo .marca-icone span { width: 18px; height: 18px; }
+    .topo h1 { font-size: 28px; font-weight: 700; letter-spacing: -.03em; line-height: 1.2; }
+    .topo p { color: var(--texto-suave); margin-top: 6px; font-size: 15px; }
+
+    .caixa {
+      background: var(--card); border: 1px solid var(--borda);
+      border-radius: var(--raio); padding: 28px;
+    }
+
+    .abas {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4px;
+      background: #f0efed; padding: 4px; border-radius: 999px; margin-bottom: 24px;
+    }
+    .abas button {
+      border: 0; background: transparent; padding: 8px; border-radius: 999px;
+      font-size: 14px; font-weight: 600; color: var(--texto-suave); transition: background .15s, color .15s;
+    }
+    .abas button.ativa { background: var(--card); color: var(--texto); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+
+    .campo { margin-bottom: 16px; }
+    .campo label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+    .campo input {
+      width: 100%; padding: 11px 14px; border: 1px solid var(--borda-forte);
+      border-radius: 10px; background: var(--card); font-size: 15px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .campo input:focus { outline: none; border-color: var(--verde); box-shadow: 0 0 0 3px var(--verde-claro); }
+    .campo .ajuda { font-size: 13px; color: var(--texto-suave); margin-top: 4px; }
+
+    .senha-linha { position: relative; }
+    .senha-linha input { padding-right: 70px; }
+    .ver-senha {
+      position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+      border: 0; background: transparent; font-size: 13px; font-weight: 600;
+      color: var(--texto-suave); padding: 6px 8px; border-radius: 6px;
+    }
+    .ver-senha:hover { color: var(--texto); }
+
+    .btn {
+      width: 100%; border: 0; background: var(--texto); color: #fff;
+      font-weight: 600; font-size: 15px; padding: 12px 20px; border-radius: 999px;
+      margin-top: 6px; transition: background .15s;
+    }
+    .btn:hover { background: #374151; }
+    .btn-contorno { background: var(--card); color: var(--texto); border: 1px solid var(--borda-forte); }
+    .btn-contorno:hover { background: #f5f5f4; }
+
+    .erro {
+      display: none; font-size: 14px; color: var(--vermelho);
+      background: #fff1f3; border: 1px solid #fecdd6; border-radius: 10px;
+      padding: 10px 12px; margin-bottom: 16px;
+    }
+    .erro.mostrar { display: block; }
+
+    .rodape-caixa { text-align: center; font-size: 14px; color: var(--texto-suave); margin-top: 18px; }
+    .rodape-caixa button { border: 0; background: none; color: var(--verde-escuro); font-weight: 600; }
+    .rodape-caixa button:hover { text-decoration: underline; }
+
+    .aviso { font-size: 13px; color: var(--texto-suave); text-align: center; margin-top: 22px; line-height: 1.5; }
+
+    /* Já conectado */
+    .conectado { text-align: center; }
+    .avatar {
+      width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 14px;
+      background: var(--verde-claro); color: var(--verde-escuro);
+      display: grid; place-items: center; font-size: 26px; font-weight: 700;
+    }
+    .conectado h2 { font-size: 20px; font-weight: 700; letter-spacing: -.015em; }
+    .conectado p { color: var(--texto-suave); font-size: 14px; margin: 2px 0 22px; }
+    .conectado .btn { display: block; text-decoration: none; text-align: center; margin-top: 10px; }
+
+    [hidden] { display: none !important; }
+
+    @media (max-width: 600px) {
+      .menu-marca .marca-texto { display: none; }
+      main { padding-top: 40px; }
+      .caixa { padding: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="menu">
+  <div class="menu-inner">
+    <a class="menu-marca" href="index.html"><span class="marca-icone"><span></span></span><span class="marca-texto">Ideias para o Brasil</span></a>
+    <a class="item" href="index.html">Ideias</a>
+    <a class="item" href="proposta.html">Estudo</a>
+    <a class="item ativo" href="login.html">Entrar</a>
+  </div>
+</nav>
+
+<main>
+  <div class="topo">
+    <div class="marca-icone"><span></span></div>
+    <h1 id="titulo">Bem-vindo de volta</h1>
+    <p id="subtitulo">Entre para compartilhar e comentar ideias.</p>
+  </div>
+
+  <!-- Formulários -->
+  <div class="caixa" id="caixa-forms">
+    <div class="abas" role="tablist">
+      <button type="button" class="ativa" data-aba="entrar" role="tab">Entrar</button>
+      <button type="button" data-aba="cadastro" role="tab">Criar conta</button>
+    </div>
+
+    <div class="erro" id="erro" role="alert"></div>
+
+    <form id="form-entrar" novalidate>
+      <div class="campo">
+        <label for="email-entrar">E-mail</label>
+        <input id="email-entrar" type="email" autocomplete="email" placeholder="voce@email.com" required>
+      </div>
+      <div class="campo">
+        <label for="senha-entrar">Senha</label>
+        <div class="senha-linha">
+          <input id="senha-entrar" type="password" autocomplete="current-password" placeholder="Sua senha" required>
+          <button type="button" class="ver-senha" data-alvo="senha-entrar">Mostrar</button>
+        </div>
+      </div>
+      <button class="btn" type="submit">Entrar</button>
+      <p class="rodape-caixa">Ainda não tem conta? <button type="button" data-ir="cadastro">Criar conta</button></p>
+    </form>
+
+    <form id="form-cadastro" novalidate hidden>
+      <div class="campo">
+        <label for="nome-cadastro">Nome</label>
+        <input id="nome-cadastro" type="text" autocomplete="name" maxlength="40" placeholder="Seu nome" required>
+      </div>
+      <div class="campo">
+        <label for="email-cadastro">E-mail</label>
+        <input id="email-cadastro" type="email" autocomplete="email" placeholder="voce@email.com" required>
+      </div>
+      <div class="campo">
+        <label for="senha-cadastro">Senha</label>
+        <div class="senha-linha">
+          <input id="senha-cadastro" type="password" autocomplete="new-password" placeholder="Crie uma senha" required>
+          <button type="button" class="ver-senha" data-alvo="senha-cadastro">Mostrar</button>
+        </div>
+        <p class="ajuda">Mínimo de 6 caracteres.</p>
+      </div>
+      <button class="btn" type="submit">Criar conta</button>
+      <p class="rodape-caixa">Já tem conta? <button type="button" data-ir="entrar">Entrar</button></p>
+    </form>
+  </div>
+
+  <!-- Já conectado -->
+  <div class="caixa conectado" id="caixa-conectado" hidden>
+    <div class="avatar" id="avatar"></div>
+    <h2 id="conectado-nome"></h2>
+    <p id="conectado-email"></p>    <a class="btn" href="index.html">Ir para as ideias</a>
+    <button class="btn btn-contorno" type="button" id="sair">Sair</button>
+  </div>
+
+  <p class="aviso">Sua conta fica salva apenas neste navegador.</p>
+</main>
+
+<script>
+  const CHAVE_CONTAS = 'ideias-brasil-contas';
+  const CHAVE_SESSAO = 'ideias-brasil-sessao';
+  const CHAVE_NOME = 'ideias-brasil-nome';
+  const $ = id => document.getElementById(id);
+
+  function carregar(chave, padrao) {
+    try { const v = JSON.parse(localStorage.getItem(chave)); return v ?? padrao; } catch { return padrao; }
+  }
+  function guardar(chave, valor) {
+    try { localStorage.setItem(chave, JSON.stringify(valor)); } catch {}
+  }
+
+  // Guarda só um resumo (hash) da senha, nunca a senha em si
+  async function resumoSenha(senha, sal) {
+    const texto = sal + ':' + senha;
+    if (window.crypto && crypto.subtle) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(texto));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    let h = 5381;
+    for (const c of texto) h = ((h << 5) + h + c.charCodeAt(0)) | 0;
+    return 'x' + (h >>> 0).toString(16);
+  }
+
+  const emailValido = e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+
+
+  // Para onde voltar depois de entrar (só páginas do próprio site)
+  const voltarPara = (() => {
+    const v = new URLSearchParams(location.search).get('voltar') || '';
+    return /^[\w-]+\.html(#[\w-]*)?$/.test(v) ? v : 'index.html';
+  })();
+
+  function mostrarErro(msg) {
+    $('erro').textContent = msg;
+    $('erro').classList.toggle('mostrar', !!msg);
+  }
+
+  function trocarAba(aba) {
+    document.querySelectorAll('.abas button').forEach(b => b.classList.toggle('ativa', b.dataset.aba === aba));
+    $('form-entrar').hidden = aba !== 'entrar';
+    $('form-cadastro').hidden = aba !== 'cadastro';
+    $('titulo').textContent = aba === 'entrar' ? 'Bem-vindo de volta' : 'Crie sua conta';
+    $('subtitulo').textContent = aba === 'entrar'
+      ? 'Entre para compartilhar e comentar ideias.'
+      : 'Participe e ajude a construir um Brasil melhor.';
+    mostrarErro('');
+    (aba === 'entrar' ? $('email-entrar') : $('nome-cadastro')).focus();
+  }
+
+  function iniciarSessao(conta) {
+    guardar(CHAVE_SESSAO, { email: conta.email, nome: conta.nome });
+    guardar(CHAVE_NOME, conta.nome);
+    location.href = voltarPara;
+  }
+
+  function mostrarConectado(sessao) {
+    $('caixa-forms').hidden = true;
+    $('caixa-conectado').hidden = false;
+    $('avatar').textContent = sessao.nome.trim().charAt(0).toUpperCase();
+    $('conectado-nome').textContent = sessao.nome;
+    $('conectado-email').textContent = sessao.email;    $('titulo').textContent = 'Você está conectado';
+    $('subtitulo').textContent = 'Pronto para participar.';
+    document.querySelector('.menu a.item.ativo').textContent = sessao.nome.split(' ')[0];
+  }
+
+  // Abas e links entre formulários
+  document.querySelectorAll('[data-aba]').forEach(b => b.addEventListener('click', () => trocarAba(b.dataset.aba)));
+  document.querySelectorAll('[data-ir]').forEach(b => b.addEventListener('click', () => trocarAba(b.dataset.ir)));
+
+  // Mostrar/ocultar senha
+  document.querySelectorAll('.ver-senha').forEach(b => b.addEventListener('click', () => {
+    const campo = $(b.dataset.alvo);
+    const mostrar = campo.type === 'password';
+    campo.type = mostrar ? 'text' : 'password';
+    b.textContent = mostrar ? 'Ocultar' : 'Mostrar';
+  }));
+
+  // Entrar
+  $('form-entrar').addEventListener('submit', async e => {
+    e.preventDefault();
+    const email = $('email-entrar').value.trim().toLowerCase();
+    const senha = $('senha-entrar').value;
+    if (!email || !senha) return mostrarErro('Preencha e-mail e senha.');
+
+    const conta = carregar(CHAVE_CONTAS, {})[email];
+    if (!conta || conta.senha !== await resumoSenha(senha, conta.sal)) {
+      return mostrarErro('E-mail ou senha incorretos.');
+    }
+    iniciarSessao(conta);
+  });
+
+  // Criar conta
+  $('form-cadastro').addEventListener('submit', async e => {
+    e.preventDefault();
+    const nome = $('nome-cadastro').value.trim();
+    const email = $('email-cadastro').value.trim().toLowerCase();
+    const senha = $('senha-cadastro').value;
+
+    if (!nome) return mostrarErro('Digite seu nome.');
+    if (!emailValido(email)) return mostrarErro('Digite um e-mail válido.');
+    if (senha.length < 6) return mostrarErro('A senha precisa ter pelo menos 6 caracteres.');
+
+    const contas = carregar(CHAVE_CONTAS, {});
+    if (contas[email]) return mostrarErro('Já existe uma conta com este e-mail. Tente entrar.');
+
+    const sal = Math.random().toString(36).slice(2) + Date.now().toString(36);
+    const conta = { nome, email, sal, senha: await resumoSenha(senha, sal), criadaEm: Date.now() };
+    contas[email] = conta;
+    guardar(CHAVE_CONTAS, contas);
+    iniciarSessao(conta);
+  });
+
+  // Sair
+  $('sair').addEventListener('click', () => {
+    try { localStorage.removeItem(CHAVE_SESSAO); } catch {}
+    location.reload();
+  });
+
+  // Ao abrir a página
+  const sessao = carregar(CHAVE_SESSAO, null);
+  if (sessao && sessao.nome) mostrarConectado(sessao);
+  else if (location.hash === '#cadastro') trocarAba('cadastro');
+</script>
+</body>
+</html>

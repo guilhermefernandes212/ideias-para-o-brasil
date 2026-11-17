@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ideias para o Brasil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --verde: #00994a;
+      --verde-escuro: #007a3b;
+      --verde-claro: #e7f6ee;
+      --amarelo: #facc15;
+      --azul: #1e3a8a;
+      --fundo: #fafaf9;
+      --card: #ffffff;
+      --texto: #111827;
+      --texto-suave: #6b7280;
+      --borda: #e7e5e4;
+      --borda-forte: #d6d3d1;
+      --vermelho: #e11d48;
+      --raio: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button, input, textarea, select { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+
+    /* ---------- Menu ---------- */
+    .menu {
+      position: sticky; top: 0; z-index: 40;
+      background: rgba(250, 250, 249, .85);
+      backdrop-filter: saturate(180%) blur(12px);
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid var(--borda);
+    }
+    .menu-inner {
+      max-width: 780px; margin: 0 auto; padding: 0 16px;
+      display: flex; align-items: center; gap: 4px; height: 60px;
+    }
+    .menu-marca {
+      display: inline-flex; align-items: center; gap: 9px; margin-right: auto;
+      font-weight: 700; font-size: 15px; color: var(--texto); text-decoration: none; letter-spacing: -.01em;
+    }
+    .marca-icone {
+      width: 22px; height: 22px; border-radius: 7px; background: var(--verde);
+      display: grid; place-items: center;
+    }
+    .marca-icone span { width: 9px; height: 9px; border-radius: 50%; background: var(--amarelo); }
+    .menu a.item {
+      color: var(--texto-suave); text-decoration: none; font-weight: 500; font-size: 14px;
+      padding: 7px 14px; border-radius: 999px; transition: color .15s, background .15s;
+    }
+    .menu a.item:hover { color: var(--texto); }
+    .menu a.item.ativo { color: var(--texto); background: #f0efed; }
+
+    /* ---------- Topo ---------- */
+    .hero { max-width: 780px; margin: 0 auto; padding: 72px 16px 40px; }
+    .selo {
+      display: inline-block; font-size: 13px; font-weight: 600; color: var(--verde-escuro);
+      background: var(--verde-claro); padding: 5px 12px; border-radius: 999px; margin-bottom: 20px;
+    }
+    .hero h1 {
+      font-size: clamp(34px, 6.5vw, 54px); font-weight: 700; line-height: 1.05;
+      letter-spacing: -.035em; max-width: 640px;
+    }
+    .hero h1 em { font-style: normal; color: var(--verde); }
+    .hero p { font-size: 18px; color: var(--texto-suave); max-width: 560px; margin-top: 18px; }
+    .hero-acoes { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+    .btn-link {
+      display: inline-flex; align-items: center; gap: 6px; text-decoration: none;
+      font-weight: 600; font-size: 15px; padding: 12px 20px; border-radius: 999px;
+      transition: background .15s, border-color .15s;
+    }
+    .btn-escuro { background: var(--texto); color: #fff; }
+    .btn-escuro:hover { background: #374151; }
+    .btn-contorno { border: 1px solid var(--borda-forte); color: var(--texto); background: var(--card); }
+    .btn-contorno:hover { border-color: var(--texto-suave); }
+
+    .stats { display: flex; gap: 22px; margin-top: 36px; flex-wrap: wrap; font-size: 14px; color: var(--texto-suave); }
+    .stat strong { color: var(--texto); font-weight: 700; margin-right: 4px; }
+
+    main { max-width: 780px; margin: 0 auto 80px; padding: 0 16px; }
+    .secao-titulo {
+      font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em;
+      color: var(--texto-suave); margin: 48px 0 14px;
+    }
+    .secao-titulo:first-child { margin-top: 0; }
+
+    /* ---------- Gráfico de gastos ---------- */
+    .grafico-caixa { padding: 26px; }
+    .grafico-caixa h2 { font-size: 20px; line-height: 1.3; font-weight: 650; letter-spacing: -.015em; }
+    .grafico-sub { font-size: 14px; color: var(--texto-suave); margin-top: 4px; }
+    .legenda { display: flex; gap: 18px; flex-wrap: wrap; margin: 14px 0 6px; font-size: 14px; }
+    .legenda span { display: inline-flex; align-items: center; gap: 7px; }
+    .legenda i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+    .grafico-area { position: relative; }
+    .grafico-area svg { width: 100%; height: auto; display: block; overflow: visible; }
+    .grafico-area .eixo { font-size: 12px; fill: var(--texto-suave); }
+    .grafico-area .rotulo { font-size: 12px; font-weight: 600; fill: var(--texto); }
+    .grafico-area .grade { stroke: #f0efed; stroke-width: 1; }
+    .grafico-area .base { stroke: var(--borda-forte); stroke-width: 1; }
+    .grafico-area .alvo { fill: transparent; cursor: pointer; }
+    .grafico-area .grupo-ativo .alvo { fill: rgba(0,0,0,.04); }
+    .dica {
+      position: absolute; pointer-events: none; opacity: 0; transition: opacity .12s;
+      background: #fff; border: 1px solid var(--borda); border-radius: 10px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.12); padding: 10px 12px; font-size: 13px;
+      min-width: 190px; transform: translate(-50%, -100%); z-index: 5;
+    }
+    .dica.visivel { opacity: 1; }
+    .dica strong { display: block; margin-bottom: 4px; font-size: 14px; }
+    .dica .linha-dica { display: flex; justify-content: space-between; gap: 14px; }
+    .dica .linha-dica b { font-weight: 600; }
+    .grafico-rodape { font-size: 12px; color: var(--texto-suave); margin-top: 10px; }
+    .grafico-rodape a { color: inherit; }
+    .grafico-caixa details { margin-top: 10px; font-size: 14px; }
+    .grafico-caixa summary { cursor: pointer; font-weight: 500; color: var(--texto); }
+    .tabela-gastos { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 13px; }
+    .tabela-gastos th, .tabela-gastos td { padding: 7px 8px; border-bottom: 1px solid var(--borda); text-align: right; }
+    .tabela-gastos th:first-child, .tabela-gastos td:first-child { text-align: left; }
+    .tabela-gastos th { font-weight: 600; color: var(--texto-suave); }
+
+    /* ---------- Formulário ---------- */
+    .caixa {
+      background: var(--card);
+      border-radius: var(--raio);
+      border: 1px solid var(--borda);
+    }
+    .form-ideia { padding: 26px; scroll-margin-top: 80px; }
+    .form-ideia h2 { font-size: 20px; font-weight: 650; letter-spacing: -.015em; margin-bottom: 16px; }
+    .linha { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .campo {
+      width: 100%;
+      border: 1px solid var(--borda);
+      background: var(--fundo);
+      border-radius: 12px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color .15s, box-shadow .15s, background .15s;
+    }
+    .campo:focus { border-color: var(--verde); box-shadow: 0 0 0 4px rgba(0,153,74,.12); background: #fff; }
+    textarea.campo { resize: vertical; min-height: 96px; margin-bottom: 12px; }
+    .form-rodape { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .contador { font-size: 13px; color: var(--texto-suave); }
+    .pedir-login p, .publicando { color: var(--texto-suave); font-size: 15px; }
+    .pedir-login .hero-acoes { margin-top: 14px; }
+    .publicando { font-size: 14px; margin-bottom: 12px; }
+    .publicando strong { color: var(--texto); }
+    .login-comentar { font-size: 14px; color: var(--texto-suave); margin-top: 8px; }
+    .login-comentar a { color: var(--verde-escuro); font-weight: 600; }
+    [hidden] { display: none !important; }
+
+    .btn {
+      border: none; border-radius: 999px; padding: 11px 22px;
+      font-weight: 600; transition: transform .1s, background .15s;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-primario { background: var(--texto); color: #fff; }
+    .btn-primario:hover { background: #374151; }
+    .btn-primario:disabled { background: #9ca3af; cursor: not-allowed; }
+
+    /* ---------- Barra de filtros ---------- */
+    .filtros { margin: 0 0 16px; display: flex; flex-direction: column; gap: 12px; }
+    .filtros-topo { display: flex; gap: 10px; flex-wrap: wrap; }
+    .busca { flex: 1; min-width: 200px; position: relative; }
+    .busca svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--texto-suave); }
+    .busca .campo { padding-left: 38px; background: #fff; }
+    select.campo { width: auto; background: #fff; }
+
+    .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+    .chip {
+      white-space: nowrap; border: 1px solid var(--borda); background: var(--card);
+      border-radius: 999px; padding: 6px 14px; font-size: 14px; font-weight: 500; color: var(--texto-suave);
+      transition: all .15s;
+    }
+    .chip:hover { color: var(--texto); border-color: var(--borda-forte); }
+    .chip.ativo { background: var(--texto); border-color: var(--texto); color: #fff; }
+
+    /* ---------- Cards de ideia ---------- */
+    .lista { display: flex; flex-direction: column; gap: 12px; }
+    .ideia { padding: 22px 24px; animation: entrar .3s ease; transition: border-color .15s; }
+    .ideia:hover { border-color: var(--borda-forte); }
+    @keyframes entrar { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    .ideia-topo { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .avatar {
+      width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+      display: grid; place-items: center; font-weight: 700; color: #fff; font-size: 15px;
+    }
+    .autor { font-weight: 600; font-size: 15px; }
+    .data { font-size: 13px; color: var(--texto-suave); }
+    .tag {
+      margin-left: auto; font-size: 12px; font-weight: 600;
+      padding: 4px 10px; border-radius: 999px; white-space: nowrap;
+    }
+    .ideia h3 { font-size: 18px; font-weight: 650; letter-spacing: -.01em; margin-bottom: 6px; line-height: 1.35; }
+    .ideia p.desc { color: #4b5563; white-space: pre-wrap; word-wrap: break-word; }
+
+    .acoes { display: flex; gap: 4px; margin: 14px -10px 0; }
+    .acao {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: none; border: none; border-radius: 8px;
+      padding: 7px 12px; font-size: 14px; font-weight: 500; color: var(--texto-suave);
+      transition: background .15s, color .15s;
+    }
+    .acao:hover { background: #f5f5f4; color: var(--texto); }
+    .acao.curtido { color: var(--vermelho); }
+    .acao.curtido svg { fill: var(--vermelho); animation: pulsar .3s ease; }
+    @keyframes pulsar { 50% { transform: scale(1.3); } }
+    .acao-excluir { margin-left: auto; }
+    .acao-excluir:hover { color: var(--vermelho); }
+
+    /* ---------- Comentários ---------- */
+    .comentarios { margin-top: 12px; display: none; }
+    .comentarios.aberto { display: block; }
+    .comentario { display: flex; gap: 10px; padding: 10px 0; }
+    .comentario .avatar { width: 30px; height: 30px; font-size: 12px; }
+    .bolha { background: #f5f5f4; border-radius: 12px; padding: 8px 12px; flex: 1; min-width: 0; }
+    .bolha strong { font-size: 14px; }
+    .bolha .data { margin-left: 6px; font-size: 12px; }
+    .bolha p { font-size: 14px; white-space: pre-wrap; word-wrap: break-word; }
+    .form-comentario { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+    .form-comentario .nome-com { flex: 0 0 140px; }
+    .form-comentario .texto-com { flex: 1; min-width: 160px; }
+    .form-comentario .btn { padding: 9px 16px; }
+    .sem-comentarios { font-size: 14px; color: var(--texto-suave); padding: 6px 0; }
+
+    .vazio { text-align: center; padding: 48px 20px; color: var(--texto-suave); }
+    .vazio strong { display: block; font-size: 17px; color: var(--texto); margin-bottom: 4px; }
+
+    footer {
+      max-width: 780px; margin: 0 auto; padding: 24px 16px 48px;
+      border-top: 1px solid var(--borda); font-size: 13px; color: var(--texto-suave);
+    }
+
+    .toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: var(--texto); color: #fff; padding: 12px 20px; border-radius: 999px;
+      font-weight: 500; font-size: 14px; transition: transform .3s ease; z-index: 50;
+      box-shadow: 0 6px 20px rgba(0,0,0,.2);
+    }
+    .toast.mostrar { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 600px) {
+      .hero { padding: 44px 16px 28px; }
+      .hero p { font-size: 16px; }
+      .menu-marca .marca-texto { display: none; }
+      .grafico-caixa, .form-ideia { padding: 20px; }
+      .linha { grid-template-columns: 1fr; }
+      .form-comentario .nome-com { flex: 1 1 100%; }
+      .tag { display: none; }
+      .ideia { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="menu">
+  <div class="menu-inner">
+    <a class="menu-marca" href="index.html"><span class="marca-icone"><span></span></span><span class="marca-texto">Ideias para o Brasil</span></a>
+    <a class="item ativo" href="index.html">Ideias</a>
+    <a class="item" href="proposta.html">Estudo</a>
+    <a class="item" id="menu-conta" href="login.html">Entrar</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <span class="selo">Plataforma cidadã</span>
+  <h1>Juntos, podemos construir um <em>Brasil melhor</em>.</h1>
+  <p>Compartilhe sua ideia para melhorar o país, apoie as propostas que você acredita e participe da conversa.</p>
+  <div class="hero-acoes">
+    <a class="btn-link btn-escuro" href="#form-ideia">Compartilhar ideia</a>
+    <a class="btn-link btn-contorno" href="proposta.html">Ler o estudo →</a>
+  </div>
+  <div class="stats">
+    <div class="stat"><strong id="stat-ideias">0</strong>ideias</div>
+    <div class="stat"><strong id="stat-curtidas">0</strong>curtidas</div>
+    <div class="stat"><strong id="stat-comentarios">0</strong>comentários</div>
+  </div>
+</header>
+
+<main>
+  <h2 class="secao-titulo">Gastos do Congresso</h2>
+  <!-- Gráfico: gastos anuais com cota parlamentar -->
+  <section class="caixa grafico-caixa" aria-labelledby="grafico-titulo">
+    <h2 id="grafico-titulo">Carregando gráfico...</h2>
+    <p class="grafico-sub">Quanto deputados e senadores gastaram por ano com a cota parlamentar (passagens, combustível, aluguel de carro, escritório e divulgação)</p>
+    <div class="legenda">
+      <span><i style="background: var(--verde)"></i> Câmara dos Deputados</span>
+      <span><i style="background: var(--azul)"></i> Senado Federal</span>
+    </div>
+    <div class="grafico-area" id="grafico-area">
+      <div class="dica" id="dica"></div>
+    </div>
+    <details>
+      <summary>Ver os valores em tabela</summary>
+      <table class="tabela-gastos" id="tabela-gastos"></table>
+    </details>
+    <p class="grafico-rodape" id="grafico-rodape"></p>
+  </section>
+
+  <h2 class="secao-titulo">Participe</h2>
+  <!-- Formulário de nova ideia -->
+  <form class="caixa form-ideia" id="form-ideia">
+    <h2>Compartilhe sua ideia</h2>
+    <div id="pedir-login" class="pedir-login" hidden>
+      <p>Para publicar, curtir ou comentar, entre na sua conta.</p>
+      <div class="hero-acoes">
+        <a class="btn-link btn-escuro" href="login.html?voltar=index.html">Entrar</a>
+        <a class="btn-link btn-contorno" href="login.html?voltar=index.html#cadastro">Criar conta</a>
+      </div>
+    </div>
+    <div id="campos-ideia">
+      <p class="publicando" id="publicando"></p>
+      <select class="campo" id="categoria" required style="margin-bottom:12px">
+        <option value="" disabled selected>Escolha uma categoria</option>
+      </select>
+      <input class="campo" id="titulo" placeholder="Título da ideia (ex.: Wi-Fi gratuito em praças públicas)" maxlength="100" required style="margin-bottom:12px">
+      <textarea class="campo" id="descricao" placeholder="Descreva sua ideia: qual problema ela resolve e como funcionaria?" maxlength="1000" required></textarea>
+      <div class="form-rodape">
+        <span class="contador" id="contador">0 / 1000</span>
+        <button type="submit" class="btn btn-primario">Publicar ideia</button>
+      </div>
+    </div>
+  </form>
+
+  <h2 class="secao-titulo">Ideias</h2>
+  <!-- Filtros -->
+  <div class="filtros">
+    <div class="filtros-topo">
+      <div class="busca">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input class="campo" id="busca" placeholder="Buscar ideias...">
+      </div>
+      <select class="campo" id="ordem">
+        <option value="curtidas">Mais curtidas</option>
+        <option value="recentes">Mais recentes</option>
+        <option value="comentadas">Mais comentadas</option>
+      </select>
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+
+  <div class="lista" id="lista"></div>
+</main>
+
+<footer>Ideias para o Brasil · Dados públicos e participação cidadã</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+  // ---------- Configuração ----------
+  const CATEGORIAS = {
+    'Educação':        { cor: '#2563eb', fundo: '#e0eaff' },
+    'Saúde':           { cor: '#dc2626', fundo: '#fde4e4' },
+    'Segurança':       { cor: '#7c3aed', fundo: '#ede4ff' },
+    'Meio Ambiente':   { cor: '#059669', fundo: '#d9f7ea' },
+    'Transporte':      { cor: '#d97706', fundo: '#fdf0d9' },
+    'Economia':        { cor: '#0d9488', fundo: '#d8f4f1' },
+    'Tecnologia':      { cor: '#4f46e5', fundo: '#e4e3ff' },
+    'Cidadania':       { cor: '#be185d', fundo: '#fbe2ef' },
+    'Outros':          { cor: '#475569', fundo: '#e8edf2' },
+  };
+  const CORES_AVATAR = ['#009c3b', '#002776', '#d97706', '#7c3aed', '#dc2626', '#0d9488', '#be185d', '#4f46e5'];
+  const CHAVE = 'ideias-brasil-v1';
+  const CHAVE_CURTIDAS = 'ideias-brasil-curtidas-v1';
+
+  // Conta conectada (criada na página de login)
+  const sessao = carregar('ideias-brasil-sessao', null);
+  const logado = !!(sessao && sessao.nome && sessao.email);
+
+  // ---------- Dados iniciais (exemplos) ----------
+  const agora = Date.now();
+  const H = 3600 * 1000;
+  // Ids dos exemplos inventados que existiam antes; são removidos de quem já tinha salvo
+  const IDS_REMOVIDOS = ['ex1', 'ex2', 'ex3'];
+
+  // Propostas do estudo "Menos gastos, mais Brasil" (proposta.html)
+  const AUTOR_ESTUDO = 'Estudo Menos Gastos';
+  const PROPOSTAS = [
+    {
+      id: 'prop1', titulo: 'Revogar o aumento de 24,5% da verba de gabinete dos deputados',
+      descricao: 'A verba para pagar assessores subiu de cerca de R$ 133 mil para R$ 165,8 mil por mês por deputado. Voltar ao valor anterior, corrigido só pela inflação, economizaria cerca de R$ 200 milhões por ano. Basta um ato da Mesa da Câmara, sem nova lei.',
+    },
+    {
+      id: 'prop2', titulo: 'Verba única por mandato, com cada gasto publicado',
+      descricao: 'Juntar salário, gabinete, cota e moradia em uma verba única, como nos EUA, com toda nota fiscal publicada em até 30 dias. Compra centralizada de passagens e teto conjunto para carro e combustível podem economizar de R$ 31 a 63 milhões por ano.',
+    },
+    {
+      id: 'prop3', titulo: 'Reajuste do salário de parlamentar por regra automática',
+      descricao: 'Hoje os próprios parlamentares votam o próprio reajuste. A proposta é atrelar o salário a um índice oficial, como faz a Alemanha, ou congelá-lo até a inflação alcançar. Isso acaba com o conflito de interesse.',
+    },
+    {
+      id: 'prop4', titulo: 'Emendas parlamentares com rastreamento e avaliação de resultado',
+      descricao: 'Cerca de R$ 61 bilhões em emendas em 2026. Cada emenda teria um código público para seguir o dinheiro até a obra, critério técnico de escolha e avaliação do resultado. Um ganho de eficiência de 5% equivale a R$ 3 bilhões por ano mais bem usados.',
+    },
+    {
+      id: 'prop5', titulo: 'Unificar serviços da Câmara e do Senado',
+      descricao: 'As duas Casas mantêm TV, rádio, gráfica, informática, saúde, segurança e licitações separadas. Primeiro, levantar o custo de cada serviço. Depois, unificar o que for comum, gerando economia permanente sem afetar o trabalho legislativo.',
+    },
+  ].map((p, i) => ({
+    ...p, nome: AUTOR_ESTUDO, categoria: 'Economia',
+    curtidas: 0, data: agora - (i + 1) * 60 * 1000, comentarios: [],
+  }));
+
+  // ---------- Estado ----------
+  function carregar(chave, padrao) {
+    try { const v = localStorage.getItem(chave); return v ? JSON.parse(v) : padrao; }
+    catch { return padrao; }
+  }
+  function salvar() {
+    try {
+      localStorage.setItem(CHAVE, JSON.stringify(ideias));
+      localStorage.setItem(CHAVE_CURTIDAS, JSON.stringify([...curtidas]));
+    } catch {}
+  }
+
+  let ideias = carregar(CHAVE, []).filter(i => !IDS_REMOVIDOS.includes(i.id));
+  // Acrescenta as propostas do estudo sem apagar o que já foi salvo
+  PROPOSTAS.forEach(p => { if (!ideias.some(i => i.id === p.id)) ideias.push(p); });
+  const curtidas = new Set(carregar(CHAVE_CURTIDAS, []).filter(id => !IDS_REMOVIDOS.includes(id)));   // ids que este visitante curtiu
+  const abertos = new Set();                                 // ids com comentários abertos
+  let filtroCategoria = 'Todas';
+
+  // ---------- Utilidades ----------
+  const $ = (id) => document.getElementById(id);
+
+  function escapar(txt) {
+    const d = document.createElement('div');
+    d.textContent = txt;
+    return d.innerHTML;
+  }
+  function iniciais(nome) {
+    const p = nome.trim().split(/\s+/);
+    return ((p[0]?.[0] || '') + (p.length > 1 ? p[p.length - 1][0] : '')).toUpperCase();
+  }
+  function corAvatar(nome) {
+    let h = 0;
+    for (const c of nome) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+    return CORES_AVATAR[h % CORES_AVATAR.length];
+  }
+  function tempoAtras(ts) {
+    const s = Math.floor((Date.now() - ts) / 1000);
+    if (s < 60) return 'agora mesmo';
+    const m = Math.floor(s / 60); if (m < 60) return `há ${m} min`;
+    const h = Math.floor(m / 60); if (h < 24) return `há ${h} h`;
+    const d = Math.floor(h / 24); if (d < 30) return `há ${d} dia${d > 1 ? 's' : ''}`;
+    return new Date(ts).toLocaleDateString('pt-BR');
+  }
+  function avisar(msg) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('mostrar');
+    clearTimeout(avisar.timer);
+    avisar.timer = setTimeout(() => t.classList.remove('mostrar'), 2200);
+  }
+
+  // ---------- Renderização ----------
+  function renderEstatisticas() {
+    $('stat-ideias').textContent = ideias.length;
+    $('stat-curtidas').textContent = ideias.reduce((s, i) => s + i.curtidas, 0);
+    $('stat-comentarios').textContent = ideias.reduce((s, i) => s + i.comentarios.length, 0);
+  }
+
+  function renderChips() {
+    const todas = ['Todas', ...Object.keys(CATEGORIAS)];
+    $('chips').innerHTML = todas.map(c =>
+      `<button class="chip ${c === filtroCategoria ? 'ativo' : ''}" data-cat="${c}">${c}</button>`
+    ).join('');
+  }
+
+  const ICONE_CORACAO = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7.5-4.6-9.5-9.3C1 8 3.4 4 7.3 4c2 0 3.6 1 4.7 2.6C13.1 5 14.7 4 16.7 4 20.6 4 23 8 21.5 11.7 19.5 16.4 12 21 12 21z"/></svg>`;
+  const ICONE_COMENTARIO = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>`;
+  const ICONE_COMPARTILHAR = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/></svg>`;
+  const ICONE_LIXO = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>`;
+
+  function renderComentarios(ideia) {
+    const lista = ideia.comentarios.length
+      ? ideia.comentarios.map(c => `
+          <div class="comentario">
+            <div class="avatar" style="background:${corAvatar(c.nome)}">${escapar(iniciais(c.nome))}</div>
+            <div class="bolha">
+              <strong>${escapar(c.nome)}</strong><span class="data">${tempoAtras(c.data)}</span>
+              <p>${escapar(c.texto)}</p>
+            </div>
+          </div>`).join('')
+      : `<div class="sem-comentarios">Nenhum comentário ainda. Seja o primeiro!</div>`;
+
+    return `
+      <div class="comentarios ${abertos.has(ideia.id) ? 'aberto' : ''}">
+        ${lista}
+        ${logado ? `
+        <form class="form-comentario" data-id="${ideia.id}">
+          <input class="campo texto-com" placeholder="Comentar como ${escapar(sessao.nome)}..." maxlength="500" required>
+          <button class="btn btn-primario" type="submit">Enviar</button>
+        </form>` : `
+        <p class="login-comentar"><a href="login.html?voltar=index.html">Entre na sua conta</a> para comentar.</p>`}
+      </div>`;
+  }
+
+  function renderLista() {
+    const termo = $('busca').value.trim().toLowerCase();
+    const ordem = $('ordem').value;
+
+    let visiveis = ideias.filter(i =>
+      (filtroCategoria === 'Todas' || i.categoria === filtroCategoria) &&
+      (!termo || (i.titulo + ' ' + i.descricao + ' ' + i.nome).toLowerCase().includes(termo))
+    );
+
+    visiveis.sort((a, b) => {
+      if (ordem === 'recentes') return b.data - a.data;
+      if (ordem === 'comentadas') return b.comentarios.length - a.comentarios.length || b.curtidas - a.curtidas;
+      return b.curtidas - a.curtidas || b.data - a.data;
+    });
+
+    if (!visiveis.length) {
+      $('lista').innerHTML = `<div class="caixa vazio"><strong>Nenhuma ideia encontrada</strong>Que tal ser o primeiro a sugerir algo nessa categoria?</div>`;
+      return;
+    }
+
+    $('lista').innerHTML = visiveis.map(i => {
+      const cat = CATEGORIAS[i.categoria] || CATEGORIAS['Outros'];
+      const curtiu = curtidas.has(i.id);
+      return `
+        <article class="caixa ideia" data-id="${i.id}">
+          <div class="ideia-topo">
+            <div class="avatar" style="background:${corAvatar(i.nome)}">${escapar(iniciais(i.nome))}</div>
+            <div>
+              <div class="autor">${escapar(i.nome)}</div>
+              <div class="data">${tempoAtras(i.data)}</div>
+            </div>
+            <span class="tag" style="color:${cat.cor};background:${cat.fundo}">${escapar(i.categoria)}</span>
+          </div>
+          <h3>${escapar(i.titulo)}</h3>
+          <p class="desc">${escapar(i.descricao)}</p>
+          <div class="acoes">
+            <button class="acao ${curtiu ? 'curtido' : ''}" data-acao="curtir">${ICONE_CORACAO} ${i.curtidas}</button>
+            <button class="acao" data-acao="comentar">${ICONE_COMENTARIO} ${i.comentarios.length}</button>
+            <button class="acao" data-acao="compartilhar">${ICONE_COMPARTILHAR} Compartilhar</button>
+            ${(i.autor ? logado && i.autor === sessao.email : i.minha) ? `<button class="acao acao-excluir" data-acao="excluir" title="Excluir minha ideia">${ICONE_LIXO}</button>` : ''}
+          </div>
+          ${renderComentarios(i)}
+        </article>`;
+    }).join('');
+  }
+
+  // ---------- Gráfico de gastos com cota parlamentar ----------
+  // Somas dos arquivos oficiais de dados abertos (valor líquido na Câmara, valor reembolsado no Senado).
+  // Para atualizar, troque os números abaixo e a data em ATUALIZADO_EM.
+  const ATUALIZADO_EM = '05/11/2026';
+  const GASTOS = [
+    { ano: 2020, camara: 149863136.21, senado: 20414601.90 },
+    { ano: 2021, camara: 165312462.11, senado: 25020323.84 },
+    { ano: 2022, camara: 161933901.45, senado: 27323307.63 },
+    { ano: 2023, camara: 201200284.99, senado: 29024400.29 },
+    { ano: 2024, camara: 211452239.40, senado: 32227892.64 },
+    { ano: 2025, camara: 214472635.56, senado: 37288677.35 },
+    { ano: 2026, camara: 149132392.86, senado: 26582428.19, parcial: true },
+  ];
+
+  const emMilhoes = v => 'R$ ' + (v / 1e6).toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + ' mi';
+  const emReais = v => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+
+  function renderGrafico() {
+    const completos = GASTOS.filter(g => !g.parcial);
+    const primeiro = completos[0], ultimo = completos[completos.length - 1];
+    const totalIni = primeiro.camara + primeiro.senado, totalFim = ultimo.camara + ultimo.senado;
+    const alta = Math.round((totalFim / totalIni - 1) * 100);
+    $('grafico-titulo').textContent =
+      `Gasto com cota parlamentar subiu ${alta}% de ${primeiro.ano} a ${ultimo.ano}: de ${emMilhoes(totalIni)} para ${emMilhoes(totalFim)} por ano`;
+
+    // Dimensões do desenho: usa a largura real da tela para o texto não encolher no celular
+    const area = $('grafico-area');
+    const W = Math.max(300, Math.round(area.clientWidth) || 760);
+    const H = W < 500 ? 260 : 300, esq = W < 500 ? 46 : 58, dir = 8, cima = 22, baixo = 40;
+    const passo = 50e6;
+    const maximo = Math.ceil(Math.max(...GASTOS.map(g => g.camara)) / passo) * passo;
+    const alturaUtil = H - cima - baixo;
+    const y = v => cima + (1 - v / maximo) * alturaUtil;
+    const larguraGrupo = (W - esq - dir) / GASTOS.length;
+    const barra = Math.min(30, larguraGrupo * 0.36);
+
+    // Barra com cantos arredondados só no topo, apoiada na base
+    const barraPath = (x, v) => {
+      const topo = y(v), base = y(0), r = Math.min(4, (base - topo) / 2, barra / 2);
+      return `M${x},${base}V${topo + r}Q${x},${topo} ${x + r},${topo}H${x + barra - r}Q${x + barra},${topo} ${x + barra},${topo + r}V${base}Z`;
+    };
+
+    let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Gasto anual com cota parlamentar da Câmara e do Senado, ${GASTOS[0].ano} a ${GASTOS[GASTOS.length - 1].ano}">`;
+
+    // Grade e eixo
+    for (let v = 0; v <= maximo; v += passo) {
+      svg += `<line class="${v === 0 ? 'base' : 'grade'}" x1="${esq}" x2="${W - dir}" y1="${y(v)}" y2="${y(v)}"/>`;
+      svg += `<text class="eixo" x="${esq - 8}" y="${y(v) + 4}" text-anchor="end">${v === 0 ? '0' : (v / 1e6) + ' mi'}</text>`;
+    }
+
+    GASTOS.forEach((g, i) => {
+      const cx = esq + larguraGrupo * (i + 0.5);
+      const xC = cx - barra - 1, xS = cx + 1;   // 2px de espaço entre as barras
+      const opac = g.parcial ? 0.45 : 1;
+      svg += `<g class="grupo" data-i="${i}">`;
+      svg += `<rect class="alvo" x="${esq + larguraGrupo * i}" y="${cima}" width="${larguraGrupo}" height="${alturaUtil}" rx="6"/>`;
+      svg += `<path d="${barraPath(xC, g.camara)}" fill="var(--verde)" fill-opacity="${opac}" pointer-events="none"/>`;
+      svg += `<path d="${barraPath(xS, g.senado)}" fill="var(--azul)" fill-opacity="${opac}" pointer-events="none"/>`;
+      // Rótulo de valor só no primeiro e no último ano completo
+      if (g === primeiro || g === ultimo) {
+        svg += `<text class="rotulo" x="${xC + barra / 2}" y="${y(g.camara) - 6}" text-anchor="middle">${Math.round(g.camara / 1e6)}</text>`;
+        svg += `<text class="rotulo" x="${xS + barra / 2}" y="${y(g.senado) - 6}" text-anchor="middle">${Math.round(g.senado / 1e6)}</text>`;
+      }
+      svg += `<text class="eixo" x="${cx}" y="${H - baixo + 18}" text-anchor="middle">${g.ano}</text>`;
+      if (g.parcial) svg += `<text class="eixo" x="${cx}" y="${H - baixo + 33}" text-anchor="middle" font-style="italic">parcial</text>`;
+      svg += `</g>`;
+    });
+    svg += `</svg>`;
+
+    area.querySelector('svg')?.remove();
+    area.insertAdjacentHTML('beforeend', svg);
+
+    // Dica ao passar o mouse ou tocar em um ano
+    const dica = $('dica');
+    const mostrar = grupo => {
+      const g = GASTOS[+grupo.dataset.i];
+      area.querySelectorAll('.grupo').forEach(el => el.classList.toggle('grupo-ativo', el === grupo));
+      dica.innerHTML = `<strong>${g.ano}${g.parcial ? ' (parcial, até ' + ATUALIZADO_EM + ')' : ''}</strong>
+        <div class="linha-dica"><span>Câmara</span><b>${emReais(g.camara)}</b></div>
+        <div class="linha-dica"><span>Senado</span><b>${emReais(g.senado)}</b></div>
+        <div class="linha-dica"><span>Total</span><b>${emReais(g.camara + g.senado)}</b></div>`;
+      const caixaArea = area.getBoundingClientRect(), caixaG = grupo.getBoundingClientRect();
+      const meio = caixaG.left + caixaG.width / 2 - caixaArea.left;
+      const metade = 100;
+      dica.style.left = Math.max(metade, Math.min(caixaArea.width - metade, meio)) + 'px';
+      dica.style.top = (caixaG.top - caixaArea.top + 8) + 'px';
+      dica.classList.add('visivel');
+    };
+    const esconder = () => {
+      dica.classList.remove('visivel');
+      area.querySelectorAll('.grupo').forEach(el => el.classList.remove('grupo-ativo'));
+    };
+    area.querySelectorAll('.grupo').forEach(grupo => {
+      grupo.addEventListener('mouseenter', () => mostrar(grupo));
+      grupo.addEventListener('click', () => mostrar(grupo));
+    });
+    area.addEventListener('mouseleave', esconder);
+
+    // Tabela com os mesmos valores
+    $('tabela-gastos').innerHTML =
+      `<thead><tr><th>Ano</th><th>Câmara</th><th>Senado</th><th>Total</th></tr></thead><tbody>` +
+      GASTOS.map(g => `<tr><td>${g.ano}${g.parcial ? ' (parcial)' : ''}</td><td>${emReais(g.camara)}</td><td>${emReais(g.senado)}</td><td>${emReais(g.camara + g.senado)}</td></tr>`).join('') +
+      `</tbody>`;
+
+    $('grafico-rodape').innerHTML =
+      `Fonte: dados abertos da <a href="https://www.camara.leg.br/cota-parlamentar/" target="_blank" rel="noopener">Câmara dos Deputados</a> ` +
+      `e do <a href="https://www12.senado.leg.br/transparencia" target="_blank" rel="noopener">Senado Federal</a>. ` +
+      `Atualizado em ${ATUALIZADO_EM}. Valores em reais da época, sem correção pela inflação. ` +
+      `Em 2020 e 2021, a pandemia reduziu viagens. O ano de 2026 ainda não terminou.`;
+  }
+
+  function render() {
+    renderEstatisticas();
+    renderChips();
+    renderLista();
+  }
+
+  // ---------- Eventos ----------
+  // Preenche as categorias do formulário
+  $('categoria').innerHTML += Object.keys(CATEGORIAS).map(c => `<option>${c}</option>`).join('');
+
+  // Contador de caracteres
+  $('descricao').addEventListener('input', e => {
+    $('contador').textContent = `${e.target.value.length} / 1000`;
+  });
+
+  // Só quem está conectado pode publicar, curtir e comentar
+  function exigirLogin() {
+    if (logado) return true;
+    avisar('Entre na sua conta para participar.');
+    setTimeout(() => { location.href = 'login.html?voltar=index.html'; }, 1200);
+    return false;
+  }
+
+  if (logado) {
+    $('publicando').innerHTML = `Publicando como <strong>${escapar(sessao.nome)}</strong>`;
+  } else {
+    $('pedir-login').hidden = false;
+    $('campos-ideia').hidden = true;
+  }
+
+  // Publicar ideia
+  $('form-ideia').addEventListener('submit', e => {
+    e.preventDefault();
+    if (!exigirLogin()) return;
+    const nome = sessao.nome;
+    const titulo = $('titulo').value.trim();
+    const descricao = $('descricao').value.trim();
+    const categoria = $('categoria').value;
+    if (!titulo || !descricao || !categoria) return;
+
+    ideias.unshift({
+      id: 'i' + Date.now() + Math.random().toString(36).slice(2, 6),
+      nome, titulo, descricao, categoria, autor: sessao.email,
+      curtidas: 0, data: Date.now(), comentarios: [], minha: true,
+    });
+    salvar();
+
+    $('titulo').value = '';
+    $('descricao').value = '';
+    $('categoria').selectedIndex = 0;
+    $('contador').textContent = '0 / 1000';
+    $('ordem').value = 'recentes';
+    filtroCategoria = 'Todas';
+    render();
+    avisar('Ideia publicada. Obrigado por contribuir!');
+  });
+
+  // Filtros
+  $('busca').addEventListener('input', renderLista);
+  $('ordem').addEventListener('change', renderLista);
+  $('chips').addEventListener('click', e => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+    filtroCategoria = chip.dataset.cat;
+    renderChips();
+    renderLista();
+  });
+
+  // Ações nos cards (curtir, comentar, compartilhar, excluir)
+  $('lista').addEventListener('click', async e => {
+    const botao = e.target.closest('[data-acao]');
+    if (!botao) return;
+    const id = botao.closest('.ideia').dataset.id;
+    const ideia = ideias.find(i => i.id === id);
+    if (!ideia) return;
+
+    switch (botao.dataset.acao) {
+      case 'curtir':
+        if (!exigirLogin()) break;
+        if (curtidas.has(id)) { curtidas.delete(id); ideia.curtidas--; }
+        else { curtidas.add(id); ideia.curtidas++; }
+        salvar();
+        renderEstatisticas();
+        renderLista();
+        break;
+
+      case 'comentar':
+        abertos.has(id) ? abertos.delete(id) : abertos.add(id);
+        renderLista();
+        if (abertos.has(id)) {
+          const form = document.querySelector(`.form-comentario[data-id="${id}"]`);
+          if (form) form.querySelector('.texto-com').focus();
+        }
+        break;
+
+      case 'compartilhar': {
+        const texto = `💡 ${ideia.titulo} — ideia para um Brasil melhor`;
+        try {
+          if (navigator.share) await navigator.share({ title: ideia.titulo, text: texto, url: location.href });
+          else { await navigator.clipboard.writeText(`${texto}\n${location.href}`); avisar('Link copiado!'); }
+        } catch {}
+        break;
+      }
+
+      case 'excluir':
+        if (confirm('Excluir esta ideia?')) {
+          ideias = ideias.filter(i => i.id !== id);
+          curtidas.delete(id);
+          salvar();
+          render();
+          avisar('Ideia excluída.');
+        }
+        break;
+    }
+  });
+
+  // Enviar comentário
+  $('lista').addEventListener('submit', e => {
+    const form = e.target.closest('.form-comentario');
+    if (!form) return;
+    e.preventDefault();
+    if (!exigirLogin()) return;
+    const ideia = ideias.find(i => i.id === form.dataset.id);
+    const texto = form.querySelector('.texto-com').value.trim();
+    if (!ideia || !texto) return;
+
+    ideia.comentarios.push({ nome: sessao.nome, autor: sessao.email, texto, data: Date.now() });
+    salvar();
+    renderEstatisticas();
+    renderLista();
+    avisar('Comentário enviado!');
+  });
+
+  renderGrafico();
+  // Redesenha o gráfico quando a largura da tela muda (ex.: girar o celular)
+  let larguraAnterior = $('grafico-area').clientWidth;
+  window.addEventListener('resize', () => {
+    clearTimeout(renderGrafico.timer);
+    renderGrafico.timer = setTimeout(() => {
+      const largura = $('grafico-area').clientWidth;
+      if (largura !== larguraAnterior) { larguraAnterior = largura; renderGrafico(); }
+    }, 150);
+  });
+  render();
+
+  // Menu: mostra o nome de quem está conectado
+  if (logado) {
+    $('menu-conta').textContent = sessao.nome.split(' ')[0];
+    $('menu-conta').title = 'Minha conta';
+  }
+</script>
+</body>
+</html>

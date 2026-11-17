@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menos Gastos, Mais Brasil</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --verde: #00994a;
+      --verde-escuro: #007a3b;
+      --verde-claro: #e7f6ee;
+      --amarelo: #facc15;
+      --azul: #1e3a8a;
+      --fundo: #fafaf9;
+      --card: #ffffff;
+      --texto: #111827;
+      --texto-suave: #6b7280;
+      --borda: #e7e5e4;
+      --borda-forte: #d6d3d1;
+      --raio: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--fundo); color: var(--texto); line-height: 1.65; -webkit-font-smoothing: antialiased; }
+    a { color: var(--verde-escuro); }
+
+    /* Menu (igual ao da página de ideias) */
+    .menu {
+      position: sticky; top: 0; z-index: 40;
+      background: rgba(250, 250, 249, .85);
+      backdrop-filter: saturate(180%) blur(12px);
+      -webkit-backdrop-filter: saturate(180%) blur(12px);
+      border-bottom: 1px solid var(--borda);
+    }
+    .menu-inner {
+      max-width: 780px; margin: 0 auto; padding: 0 16px;
+      display: flex; align-items: center; gap: 4px; height: 60px;
+    }
+    .menu-marca {
+      display: inline-flex; align-items: center; gap: 9px; margin-right: auto;
+      font-weight: 700; font-size: 15px; color: var(--texto); text-decoration: none; letter-spacing: -.01em;
+    }
+    .marca-icone { width: 22px; height: 22px; border-radius: 7px; background: var(--verde); display: grid; place-items: center; }
+    .marca-icone span { width: 9px; height: 9px; border-radius: 50%; background: var(--amarelo); }
+    .menu a.item {
+      color: var(--texto-suave); text-decoration: none; font-weight: 500; font-size: 14px;
+      padding: 7px 14px; border-radius: 999px; transition: color .15s, background .15s;
+    }
+    .menu a.item:hover { color: var(--texto); }
+    .menu a.item.ativo { color: var(--texto); background: #f0efed; }
+
+    .hero { max-width: 780px; margin: 0 auto; padding: 72px 16px 40px; }
+    .selo {
+      display: inline-block; font-size: 13px; font-weight: 600; color: var(--verde-escuro);
+      background: var(--verde-claro); padding: 5px 12px; border-radius: 999px; margin-bottom: 20px;
+    }
+    .hero h1 { font-size: clamp(34px, 6.5vw, 54px); font-weight: 700; line-height: 1.05; letter-spacing: -.035em; }
+    .hero h1 em { font-style: normal; color: var(--verde); }
+    .hero p { font-size: 18px; color: var(--texto-suave); max-width: 600px; margin-top: 18px; }
+    .data-estudo { font-size: 13px; color: var(--texto-suave); margin-top: 18px; }
+
+    main { max-width: 780px; margin: 0 auto 80px; padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
+    .caixa { background: var(--card); border-radius: var(--raio); border: 1px solid var(--borda); padding: 28px; }
+    h2 { font-size: 21px; font-weight: 650; letter-spacing: -.015em; margin-bottom: 10px; line-height: 1.3; }
+    h3 { font-size: 16px; margin: 18px 0 8px; }
+    p + p { margin-top: 10px; }
+    .lead { font-size: 16px; }
+    ul, ol { padding-left: 20px; margin-top: 8px; }
+    li + li { margin-top: 6px; }
+    .nota { font-size: 13px; color: var(--texto-suave); margin-top: 12px; }
+
+    /* Destaques numéricos */
+    .numeros { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 16px; }
+    .numero { background: var(--fundo); border: 1px solid var(--borda); border-radius: 12px; padding: 14px 16px; }
+    .numero strong { display: block; font-size: 24px; font-weight: 700; letter-spacing: -.02em; color: var(--texto); line-height: 1.2; }
+    .numero span { font-size: 13px; color: var(--texto-suave); }
+
+    /* Tabelas */
+    .tabela { overflow-x: auto; margin-top: 12px; border: 1px solid var(--borda); border-radius: 10px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--borda); vertical-align: top; }
+    th { background: var(--fundo); font-weight: 600; color: var(--texto-suave); white-space: nowrap; }
+    tr:last-child td { border-bottom: none; }
+    td.num, th.num { text-align: right; white-space: nowrap; }
+    tr.total td { font-weight: 700; }
+
+    /* Propostas */
+    .proposta-num { display: inline-block; background: var(--verde-claro); color: var(--verde-escuro); font-weight: 600; font-size: 13px; border-radius: 999px; padding: 3px 11px; margin-bottom: 10px; }
+    .proposta dl { display: grid; grid-template-columns: 170px 1fr; gap: 8px 16px; margin-top: 12px; font-size: 15px; }
+    .proposta dt { font-weight: 600; color: var(--texto-suave); }
+
+    .alerta { background: #fefce8; border: 1px solid #fde68a; border-radius: 12px; padding: 14px 16px; font-size: 15px; }
+
+    .cta { text-align: center; }
+    .btn { display: inline-block; background: var(--texto); color: #fff; text-decoration: none; font-weight: 600; border-radius: 999px; padding: 12px 22px; margin-top: 14px; }
+    .btn:hover { background: #374151; }
+
+    footer {
+      max-width: 780px; margin: 0 auto; padding: 24px 16px 48px;
+      border-top: 1px solid var(--borda); font-size: 13px; color: var(--texto-suave);
+    }
+
+    @media (max-width: 600px) {
+      .hero { padding: 44px 16px 28px; }
+      .hero p { font-size: 16px; }
+      .menu-marca .marca-texto { display: none; }
+      .caixa { padding: 20px; }
+      .proposta dl { grid-template-columns: 1fr; gap: 2px; }
+      .proposta dd { margin-bottom: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="menu">
+  <div class="menu-inner">
+    <a class="menu-marca" href="index.html"><span class="marca-icone"><span></span></span><span class="marca-texto">Ideias para o Brasil</span></a>
+    <a class="item" href="index.html">Ideias</a>
+    <a class="item ativo" href="proposta.html">Estudo</a>
+    <a class="item" id="menu-conta" href="login.html">Entrar</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <span class="selo">Estudo</span>
+  <h1>Menos gastos, <em>mais Brasil</em>.</h1>
+  <p>Como reduzir gastos desnecessários do Congresso Nacional, usar melhor o dinheiro dos impostos e melhorar a vida da população.</p>
+  <div class="data-estudo">Dados de novembro de 2026 · fontes oficiais citadas em cada seção</div>
+</header>
+
+<main>
+
+  <!-- Resumo -->
+  <section class="caixa">
+    <h2>Resumo</h2>
+    <p class="lead">Só em salário, verba de gabinete e cota parlamentar, os 513 deputados podem custar até <strong>R$ 1,62 bilhão por ano</strong>. Revogar o aumento recente da verba de gabinete economizaria cerca de <strong>R$ 200 milhões por ano</strong>, sem precisar de nova lei.</p>
+    <p>Esse corte é importante como exemplo, mas equivale a cerca de 0,1% do orçamento federal da saúde. Para aliviar as contas de verdade, também é preciso olhar para as emendas parlamentares (cerca de R$ 61 bilhões em 2026) e para o fundo eleitoral (R$ 4,9 bilhões).</p>
+    <div class="numeros">
+      <div class="numero"><strong>R$ 46.366</strong><span>salário mensal de deputado ou senador</span></div>
+      <div class="numero"><strong>R$ 165.806</strong><span>verba mensal de gabinete por deputado</span></div>
+      <div class="numero"><strong>R$ 6,18 bi</strong><span>gastos do Congresso (Câmara + Senado) no 1º semestre de 2026</span></div>
+      <div class="numero"><strong>R$ 61 bi</strong><span>emendas parlamentares em 2026</span></div>
+    </div>
+  </section>
+
+  <!-- 1. Onde gasta -->
+  <section class="caixa">
+    <h2>1. Onde o dinheiro do Congresso é gasto</h2>
+    <p>Valores oficiais da Câmara dos Deputados, por deputado e por mês:</p>
+    <div class="tabela">
+      <table>
+        <thead><tr><th>Item</th><th class="num">Valor mensal</th><th>Para que serve</th></tr></thead>
+        <tbody>
+          <tr><td>Salário (subsídio)</td><td class="num">R$ 46.366,19</td><td>Remuneração do mandato (Decreto Legislativo 172/2022)</td></tr>
+          <tr><td>Verba de gabinete</td><td class="num">até R$ 165.806,07</td><td>Salários de 5 a 25 assessores (Ato da Mesa 243/2026)</td></tr>
+          <tr><td>Cota parlamentar (CEAP)</td><td class="num">R$ 41.612 a R$ 58.475</td><td>Passagens, carro, combustível, escritório e divulgação. O valor muda conforme o estado.</td></tr>
+          <tr><td>Auxílio-moradia</td><td class="num">R$ 4.253,00</td><td>Moradia em Brasília. A cota parlamentar pode completar com mais R$ 4.148,80.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Custo anual dos 513 deputados pelo valor máximo</h3>
+    <div class="tabela">
+      <table>
+        <thead><tr><th>Item</th><th>Cálculo</th><th class="num">Por ano</th></tr></thead>
+        <tbody>
+          <tr><td>Salários</td><td>R$ 46.366,19 × 513 × 12</td><td class="num">R$ 285 milhões</td></tr>
+          <tr><td>Verba de gabinete</td><td>R$ 165.806,07 × 513 × 12</td><td class="num">R$ 1,02 bilhão</td></tr>
+          <tr><td>Cota parlamentar</td><td>teto de cada estado × deputados do estado × 12</td><td class="num">R$ 314 milhões</td></tr>
+          <tr class="total"><td>Total</td><td></td><td class="num">R$ 1,62 bilhão</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="nota">O cálculo usa os valores máximos. O gasto real é menor, porque nem todo deputado usa o teto. O 13º salário e os encargos dos assessores ficam de fora. Fonte: <a href="https://especial.camara.leg.br/posse2027/exercicios-do-mandato/" target="_blank" rel="noopener">Câmara dos Deputados</a>. O gasto de cada deputado pode ser consultado em <a href="https://dadosabertos.camara.leg.br/" target="_blank" rel="noopener">dadosabertos.camara.leg.br</a>.</p>
+
+    <h3>Senado e gastos ligados ao Congresso</h3>
+    <ul>
+      <li><strong>Senadores:</strong> recebem o mesmo salário. Também têm uma cota mensal de R$ 15 mil mais cinco passagens entre Brasília e o estado (<a href="https://www12.senado.leg.br/transparencia/perguntas-frequentes-1/sobre-os-senadores/o-que-e-ceaps" target="_blank" rel="noopener">Senado</a>). No Senado, a verba de gabinete não tem teto em reais. Existe só uma lista de cargos que podem ser ocupados.</li>
+      <li><strong>Câmara e Senado juntos</strong> gastaram R$ 6,18 bilhões no 1º semestre de 2026 (<a href="https://ndmais.com.br/politica/congresso-nacional-gastos-e-produtividade-em-2026/" target="_blank" rel="noopener">ND Mais</a>). A maior parte vai para servidores ativos e aposentados.</li>
+      <li><strong>Emendas parlamentares:</strong> cerca de R$ 61 bilhões em 2026. São R$ 39,9 milhões por deputado e R$ 72,8 milhões por senador em emendas individuais (<a href="https://www12.senado.leg.br/noticias/materias/2025/12/19/congresso-aprova-orcamento-de-r-6-5-trilhoes-e-r-61-bilhoes-em-emendas" target="_blank" rel="noopener">Senado</a>).</li>
+      <li><strong>Fundo eleitoral:</strong> R$ 4,9 bilhões em 2026.</li>
+    </ul>
+  </section>
+
+  <!-- 2. Propostas -->
+  <section class="caixa">
+    <h2>2. Cinco propostas concretas</h2>
+    <p>Elas estão em ordem de facilidade: as primeiras dependem só de decisão administrativa.</p>
+  </section>
+
+  <section class="caixa proposta">
+    <span class="proposta-num">Proposta 1</span>
+    <h2>Revogar o aumento da verba de gabinete</h2>
+    <dl>
+      <dt>Problema</dt><dd>A verba para pagar assessores subiu de cerca de R$ 133 mil para R$ 165,8 mil por mês, um aumento de 24,5%.</dd>
+      <dt>Solução</dt><dd>Voltar ao valor anterior, corrigido só pela inflação, ou limitar a 15 assessores por gabinete.</dd>
+      <dt>Custo para implantar</dt><dd>Praticamente zero. Basta um ato da Mesa da Câmara.</dd>
+      <dt>Economia estimada</dt><dd>Cerca de R$ 200 milhões por ano, ou R$ 1 bilhão em cinco anos.</dd>
+      <dt>Benefício</dt><dd>Mostra que o Congresso também corta na própria casa e abre espaço no orçamento.</dd>
+      <dt>Riscos</dt><dd>Menos assessores nos estados. A medida depende da vontade política da própria Câmara.</dd>
+    </dl>
+  </section>
+
+  <section class="caixa proposta">
+    <span class="proposta-num">Proposta 2</span>
+    <h2>Verba única por mandato, com cada gasto publicado</h2>
+    <dl>
+      <dt>Problema</dt><dd>O custo de cada mandato está espalhado em salário, gabinete, cota, moradia e imóveis. Isso dificulta a fiscalização.</dd>
+      <dt>Solução</dt><dd>Juntar tudo em uma verba única, como nos EUA. Toda nota fiscal seria publicada em até 30 dias, a compra de passagens seria centralizada e haveria um teto conjunto para carro e combustível.</dd>
+      <dt>Custo para implantar</dt><dd>Baixo. A Câmara já tem o sistema de dados abertos.</dd>
+      <dt>Economia estimada</dt><dd>R$ 31 a 63 milhões por ano, com redução de 10% a 20% na cota parlamentar.</dd>
+      <dt>Benefício</dt><dd>Qualquer cidadão pode ver quanto custa o seu deputado.</dd>
+      <dt>Riscos</dt><dd>Deputados de estados distantes viajam mais e precisariam de uma regra própria.</dd>
+    </dl>
+  </section>
+
+  <section class="caixa proposta">
+    <span class="proposta-num">Proposta 3</span>
+    <h2>Reajuste de salário por regra automática</h2>
+    <dl>
+      <dt>Problema</dt><dd>Hoje os próprios parlamentares votam o próprio reajuste.</dd>
+      <dt>Solução</dt><dd>Atrelar o reajuste a um índice oficial, como faz a Alemanha, ou congelar o salário até a inflação alcançá-lo.</dd>
+      <dt>Custo para implantar</dt><dd>Exige lei ou emenda constitucional, porque o salário serve de referência para o teto do funcionalismo.</dd>
+      <dt>Economia estimada</dt><dd>Evita aumentos acima da inflação. Um corte de 10% daria R$ 28,5 milhões por ano.</dd>
+      <dt>Benefício</dt><dd>Acaba com o conflito de interesse e aumenta a confiança no Congresso.</dd>
+      <dt>Riscos</dt><dd>A aprovação depende dos próprios parlamentares.</dd>
+    </dl>
+  </section>
+
+  <section class="caixa proposta">
+    <span class="proposta-num">Proposta 4</span>
+    <h2>Emendas parlamentares com rastreamento e avaliação</h2>
+    <dl>
+      <dt>Problema</dt><dd>Cerca de R$ 61 bilhões por ano são indicados por parlamentares, e nem sempre se sabe onde o dinheiro chegou nem o que ele entregou.</dd>
+      <dt>Solução</dt><dd>Cada emenda teria um código público para seguir o dinheiro até a obra, critério técnico de escolha, como fila do SUS ou nota da escola, e avaliação do resultado.</dd>
+      <dt>Custo para implantar</dt><dd>Médio: integrar sistemas do governo federal, dos estados e dos municípios.</dd>
+      <dt>Economia estimada</dt><dd>Não é um corte. Um ganho de eficiência de 5% equivaleria a R$ 3 bilhões por ano mais bem usados.</dd>
+      <dt>Benefício</dt><dd>Mais obras concluídas e serviços entregues com o mesmo dinheiro.</dd>
+      <dt>Riscos</dt><dd>Resistência política e necessidade de mudar a Lei de Diretrizes Orçamentárias.</dd>
+    </dl>
+  </section>
+
+  <section class="caixa proposta">
+    <span class="proposta-num">Proposta 5</span>
+    <h2>Unificar serviços da Câmara e do Senado</h2>
+    <dl>
+      <dt>Problema</dt><dd>Câmara e Senado mantêm estruturas separadas de TV, rádio, gráfica, informática, saúde, segurança e licitações.</dd>
+      <dt>Solução</dt><dd>Primeiro, levantar o custo de cada serviço. Depois, unificar o que for comum e repor só parte das aposentadorias nessas áreas.</dd>
+      <dt>Custo para implantar</dt><dd>Baixo para o levantamento. A transição exige planejamento.</dd>
+      <dt>Economia estimada</dt><dd>Ainda sem dado: os gastos por serviço não estão publicados de forma separada.</dd>
+      <dt>Benefício</dt><dd>Economia permanente, sem afetar o trabalho legislativo.</dd>
+      <dt>Riscos</dt><dd>Mudança lenta e resistência interna.</dd>
+    </dl>
+  </section>
+
+  <!-- 3. Simulação -->
+  <section class="caixa">
+    <h2>3. Simulação de economia</h2>
+    <p>Esta é a soma do que pode ser cortado na verba de gabinete e na cota parlamentar da Câmara e na cota do Senado, que juntas custam R$ 1,37 bilhão por ano:</p>
+    <div class="tabela">
+      <table>
+        <thead><tr><th>Corte</th><th class="num">Por mês</th><th class="num">Por ano</th><th class="num">Em 5 anos</th></tr></thead>
+        <tbody>
+          <tr><td>5%</td><td class="num">R$ 5,7 mi</td><td class="num">R$ 68 mi</td><td class="num">R$ 342 mi</td></tr>
+          <tr><td>10%</td><td class="num">R$ 11,4 mi</td><td class="num">R$ 137 mi</td><td class="num">R$ 684 mi</td></tr>
+          <tr><td>20%</td><td class="num">R$ 22,8 mi</td><td class="num">R$ 274 mi</td><td class="num">R$ 1,37 bi</td></tr>
+          <tr><td>30%</td><td class="num">R$ 34,2 mi</td><td class="num">R$ 411 mi</td><td class="num">R$ 2,05 bi</td></tr>
+          <tr><td>50% (pouco realista)</td><td class="num">R$ 57 mi</td><td class="num">R$ 684 mi</td><td class="num">R$ 3,42 bi</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="nota">Premissas: tetos oficiais de 2026, sem inflação e sem contar o mesmo gasto duas vezes. Para a cota do Senado, usamos o meio da faixa noticiada em 2024. Cortes acima de 20% deixariam o gabinete médio com cerca de 12 assessores. Um corte de 20% no fundo eleitoral economizaria cerca de R$ 1 bilhão por eleição.</p>
+  </section>
+
+  <!-- 4. Comparação -->
+  <section class="caixa">
+    <h2>4. Comparação com outros países</h2>
+    <p>O Brasil não tem parlamentares demais e não paga o maior salário em valor absoluto. O que destoa é o salário perto da renda da população.</p>
+    <div class="tabela">
+      <table>
+        <thead><tr><th>País</th><th class="num">Parlamentares</th><th>Salário</th><th class="num">Em salários mínimos (aprox.)</th></tr></thead>
+        <tbody>
+          <tr><td>Brasil</td><td class="num">594</td><td>R$ 46.366 por mês</td><td class="num">29</td></tr>
+          <tr><td>Estados Unidos</td><td class="num">535</td><td>US$ 174.000 por ano</td><td class="num">11,5</td></tr>
+          <tr><td>Japão</td><td class="num">713</td><td>¥ 1,294 milhão por mês, mais bônus</td><td class="num">7</td></tr>
+          <tr><td>Alemanha</td><td class="num">630</td><td>€ 11.833 por mês</td><td class="num">5</td></tr>
+          <tr><td>China</td><td class="num">cerca de 2.900</td><td>Sem salário: o cargo é de meio período</td><td class="num">—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li><strong>Brasil:</strong> cerca de 2,8 parlamentares por milhão de habitantes. A Alemanha tem 7,5.</li>
+      <li><strong>EUA:</strong> cada deputado tem uma verba única de cerca de US$ 1,93 milhão por ano, com os gastos publicados (<a href="https://www.everycrsreport.com/reports/R40962.html" target="_blank" rel="noopener">CRS</a>).</li>
+      <li><strong>Alemanha:</strong> o salário é reajustado por um índice oficial, sem votação dos próprios parlamentares.</li>
+      <li><strong>China:</strong> o sistema de partido único não serve de modelo de comparação.</li>
+    </ul>
+    <p class="nota">Os salários mínimos de outros países e as populações são valores aproximados.</p>
+  </section>
+
+  <!-- 5. Bolso -->
+  <section class="caixa">
+    <h2>5. Como isso chega ao bolso do brasileiro</h2>
+    <div class="alerta">Cortar gastos <strong>não</strong> reduz impostos nem preços automaticamente. Para virar alívio de verdade, três condições precisam acontecer.</div>
+    <ol>
+      <li><strong>A economia precisa ser permanente.</strong> Se o dinheiro economizado num lugar for gasto em outro, nada muda para o cidadão.</li>
+      <li><strong>As contas precisam ter credibilidade.</strong> Quando o mercado confia nas contas públicas, o dólar tende a ficar mais estável e a inflação esperada cai. Com isso, o Banco Central pode baixar os juros, e crédito, financiamentos e prestações ficam mais baratos.</li>
+      <li><strong>O destino precisa estar na lei.</strong> Para a economia ir para hospitais, escolas, segurança ou infraestrutura, a Lei de Diretrizes Orçamentárias precisa prever que, quando o Legislativo gasta menos, outra área ganha esse espaço.</li>
+    </ol>
+  </section>
+
+  <!-- Fontes -->
+  <section class="caixa">
+    <h2>Fontes</h2>
+    <ul>
+      <li><a href="https://especial.camara.leg.br/posse2027/exercicios-do-mandato/" target="_blank" rel="noopener">Câmara dos Deputados: salário, verbas e cota parlamentar</a></li>
+      <li><a href="https://dadosabertos.camara.leg.br/" target="_blank" rel="noopener">Dados Abertos da Câmara</a></li>
+      <li><a href="https://www12.senado.leg.br/transparencia/perguntas-frequentes-1/sobre-os-senadores/o-que-e-ceaps" target="_blank" rel="noopener">Senado Federal: cota dos senadores</a></li>
+      <li><a href="https://www12.senado.leg.br/noticias/materias/2025/12/19/congresso-aprova-orcamento-de-r-6-5-trilhoes-e-r-61-bilhoes-em-emendas" target="_blank" rel="noopener">Agência Senado: Orçamento de 2026 e emendas</a></li>
+      <li><a href="https://ndmais.com.br/politica/congresso-nacional-gastos-e-produtividade-em-2026/" target="_blank" rel="noopener">ND Mais: gastos do Congresso no 1º semestre de 2026</a></li>
+      <li><a href="https://www.everycrsreport.com/reports/R40962.html" target="_blank" rel="noopener">Congressional Research Service: verba dos deputados dos EUA</a></li>
+      <li><a href="https://www.portaltransparencia.gov.br/" target="_blank" rel="noopener">Portal da Transparência</a> e <a href="https://www.tesourotransparente.gov.br/" target="_blank" rel="noopener">Tesouro Transparente</a></li>
+    </ul>
+    <p class="nota">Os cálculos de custo anual e de economia são estimativas próprias feitas com os valores oficiais acima. Não são dados oficiais.</p>
+  </section>
+
+  <section class="caixa cta">
+    <h2>O que você acha?</h2>
+    <p>As cinco propostas estão na página de ideias. Curta as que você apoia e comente.</p>
+    <a class="btn" href="index.html">Ver e votar nas propostas</a>
+  </section>
+
+</main>
+
+<footer>Ideias para o Brasil · Dados públicos e participação cidadã</footer>
+<script>
+  // Menu: mostra o nome de quem está conectado
+  try {
+    const sessao = JSON.parse(localStorage.getItem('ideias-brasil-sessao'));
+    if (sessao && sessao.nome) {
+      const link = document.getElementById('menu-conta');
+      link.textContent = sessao.nome.split(' ')[0];
+      link.title = 'Minha conta';
+    }
+  } catch {}
+</script>
+</body>
+</html>
